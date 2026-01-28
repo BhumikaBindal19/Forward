@@ -83,7 +83,7 @@ const createFooter = () => {
     const style = document.createElement('style');
     style.textContent = `
         .footer {
-            background: var(--gray-900);
+            background: var(--primary-dark);
             color: var(--white);
             padding: 80px 20px 30px;
             margin-top: 100px;

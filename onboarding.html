@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forward - Guided Strategy</title>
+    <link rel="stylesheet" href="onboarding.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Header -->
+    <div id="header-container"></div>
+    <header class="onboarding-header">
+        <div class="header-content">
+
+            <!-- Progress Indicators -->
+            <div class="progress-indicators">
+                <div class="progress-dot active" data-step="1"></div>
+                <div class="progress-dot" data-step="2"></div>
+                <div class="progress-dot" data-step="3"></div>
+                <div class="progress-dot" data-step="4"></div>
+                <div class="progress-dot" data-step="5"></div>
+                <div class="progress-dot" data-step="6"></div>
+                <div class="progress-dot" data-step="7"></div>
+            </div>
+            <button class="save-exit-btn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="onboarding-main">
+        <div class="question-container">
+            <!-- Phase Badge -->
+            <div class="phase-badge">
+                <i class="fas fa-lightbulb"></i>
+                <span id="phaseName">Vision Phase</span>
+            </div>
+
+            <!-- Question Card -->
+            <div class="question-card" id="questionCard">
+                <h2 class="question-title" id="questionTitle">
+                    What are you trying to build — in one sentence?
+                </h2>
+                <p class="question-subtitle" id="questionSubtitle">
+                    Example: "I want to help local home bakers get regular customers."
+                </p>
+            </div>
+
+            <!-- Answer Input Area -->
+            <div class="answer-section">
+                <!-- Text Input (for open-ended questions) -->
+                <div class="answer-input-wrapper" id="textInputWrapper">
+                    <textarea id="answerInput" class="answer-input" placeholder="I want to build a world where..."
+                        rows="1"></textarea>
+                    <button class="continue-btn" id="continueBtn" disabled>
+                        <span>Continue</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Multiple Choice (for specific questions) -->
+                <div class="answer-options" id="optionsWrapper" style="display: none;">
+                    <!-- Options will be inserted here dynamically -->
+                </div>
+
+                <!-- Auto-save Indicator -->
+                <div class="auto-save-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Your response is saved automatically</span>
+                </div>
+
+                <!-- Keyboard Hint -->
+                <div class="keyboard-hint">
+                    Press <kbd>Enter ↵</kbd>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Footer -->
+        <div class="navigation-footer">
+            <button class="nav-btn prev-btn" id="prevBtn" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="question-counter" id="questionCounter">QUESTION 1 OF 7</span>
+            <button class="nav-btn next-btn" id="nextBtn" style="opacity: 0; pointer-events: none;">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- Success Modal (appears after completion) -->
+    <div class="success-modal" id="successModal" style="display: none;">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Strategy Complete! 🎉</h2>
+            <p>We're generating your personalized roadmap based on your responses.</p>
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- Footer Component -->
+    <div id="footer-container"></div>
+
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+    <script src="onboarding.js"></script>
+</body>
+
+</html>
