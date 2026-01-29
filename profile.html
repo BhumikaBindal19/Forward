@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forward - Profile</title>
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header Component -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main class="profile-main">
+        <div class="profile-container">
+            <!-- Profile Header -->
+            <section class="profile-header">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar">
+                        <img src="https://i.pravatar.cc/150?img=12" alt="Profile Avatar">
+                        <span class="online-badge"></span>
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name-section">
+                        <h1 class="profile-name">Alex Rivera</h1>
+                        <span class="profile-badge">SOLO FOUNDER</span>
+                    </div>
+                    <p class="profile-email">alex.rivera@forward.io</p>
+                    <div class="profile-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-edit"></i>
+                            Edit Profile
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-share-alt"></i>
+                            Share Profile
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skill & Startup Idea -->
+            <section class="section-card">
+                <div class="section-header">
+                    <div class="section-icon skill-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h2 class="section-title">Skill & Startup Idea</h2>
+                </div>
+                <div class="idea-card">
+                    <div class="idea-visual">
+                        <i class="fas fa-sparkles"></i>
+                    </div>
+                    <div class="idea-content">
+                        <h3 class="idea-title">AI-Driven Productivity for Solo-Preneurs</h3>
+                        <div class="idea-details">
+                            <div class="idea-detail">
+                                <i class="fas fa-user-tie"></i>
+                                <div>
+                                    <strong>Expertise:</strong>
+                                    <span>Full-stack Development & UX Research with 8+ years in B2B SaaS.</span>
+                                </div>
+                            </div>
+                            <div class="idea-detail">
+                                <i class="fas fa-rocket"></i>
+                                <div>
+                                    <strong>Focus:</strong>
+                                    <span>Focused on building a distraction-free ecosystem that automates administrative
+                                        tasks for independent founders, allowing them to focus on deep work and
+                                        strategic growth.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Current Progress -->
+            <section class="section-card">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <div class="section-icon progress-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h2 class="section-title">Current Progress</h2>
+                    </div>
+                    <span class="phase-badge">PHASE 2: BETA</span>
+                </div>
+                <div class="progress-list">
+                    <div class="progress-item completed">
+                        <div class="progress-icon-wrapper">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="progress-content">
+                            <h4 class="progress-title">Ideation & Market Research</h4>
+                            <p class="progress-description">Validated problem with 50+ user interviews. Completed 03/24.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="progress-item in-progress">
+                        <div class="progress-icon-wrapper">
+                            <i class="fas fa-spinner"></i>
+                        </div>
+                        <div class="progress-content">
+                            <h4 class="progress-title">MVP Development</h4>
+                            <p class="progress-description">Build core automation engine and task interface. (85%
+                                complete)</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-item upcoming">
+                        <div class="progress-icon-wrapper">
+                            <i class="far fa-circle"></i>
+                        </div>
+                        <div class="progress-content">
+                            <h4 class="progress-title">Closed Beta Launch</h4>
+                            <p class="progress-description">Onboard first 100 users for feedback. Scheduled for June
+                                2024.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Opportunities -->
+            <section class="section-card">
+                <div class="section-header">
+                    <div class="section-icon opportunities-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h2 class="section-title">My Opportunities</h2>
+                </div>
+                <div class="opportunities-grid">
+                    <div class="opportunity-card income-path">
+                        <div class="opportunity-header">
+                            <div class="opportunity-icon income-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <span class="opportunity-label">INCOME PATH</span>
+                        </div>
+                        <h3 class="opportunity-title">Early Stage Grant</h3>
+                        <p class="opportunity-description">Eligible for the Founders-First Grant program for AI
+                            startups.</p>
+                        <div class="opportunity-footer">
+                            <span class="opportunity-value">$15,000 potential</span>
+                            <button class="opportunity-btn">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="opportunity-card growth-path">
+                        <div class="opportunity-header">
+                            <div class="opportunity-icon growth-icon">
+                                <i class="fas fa-chart-network"></i>
+                            </div>
+                            <span class="opportunity-label">GROWTH PATH</span>
+                        </div>
+                        <h3 class="opportunity-title">Affiliate Partnership</h3>
+                        <p class="opportunity-description">Connect with Notion creators to integrate your automation
+                            engine.</p>
+                        <div class="opportunity-footer">
+                            <span class="opportunity-value">Network growth</span>
+                            <button class="opportunity-btn">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="opportunity-card income-path">
+                        <div class="opportunity-header">
+                            <div class="opportunity-icon income-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span class="opportunity-label">INCOME PATH</span>
+                        </div>
+                        <h3 class="opportunity-title">Beta Tester Program</h3>
+                        <p class="opportunity-description">Get 50 committed beta users and gather valuable feedback.</p>
+                        <div class="opportunity-footer">
+                            <span class="opportunity-value">50 users potential</span>
+                            <button class="opportunity-btn">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="opportunity-card growth-path">
+                        <div class="opportunity-header">
+                            <div class="opportunity-icon growth-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <span class="opportunity-label">GROWTH PATH</span>
+                        </div>
+                        <h3 class="opportunity-title">Content Partnership</h3>
+                        <p class="opportunity-description">Collaborate with productivity influencers for product
+                            reviews.</p>
+                        <div class="opportunity-footer">
+                            <span class="opportunity-value">10K+ reach</span>
+                            <button class="opportunity-btn">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer Tagline -->
+            <div class="profile-footer">
+                <p class="footer-tagline">DISTRACTION-FREE PROFESSIONAL ECOSYSTEM</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Component -->
+    <div id="footer-container"></div>
+
+
+    <script src="profile.js"></script>
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+</body>
+
+</html>

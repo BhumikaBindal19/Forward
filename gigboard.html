@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forward - Gig Board</title>
+    <link rel="stylesheet" href="gigboard.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Header Component -->
+    <div id="header-container"></div>
+
+
+    <!-- Main Content -->
+    <main class="gigboard-main">
+        <div class="gigboard-container">
+            <!-- Page Header -->
+            <section class="page-header">
+                <h1 class="page-title">Ethical Gig Board</h1>
+                <p class="page-subtitle">Curated short-term opportunities for impactful entrepreneurs.</p>
+            </section>
+
+            <!-- Filters Section -->
+            <section class="filters-section">
+                <div class="filters-header">
+                    <div class="filters-label">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Filters:</span>
+                    </div>
+                    <div class="filter-buttons">
+                        <div class="filter-dropdown">
+                            <button class="filter-btn" id="skillsFilter">
+                                <span>All Skills</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-menu" id="skillsMenu">
+                                <label class="filter-option">
+                                    <input type="checkbox" value="all" checked>
+                                    <span>All Skills</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="design">
+                                    <span>Design</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="development">
+                                    <span>Development</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="marketing">
+                                    <span>Marketing</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="writing">
+                                    <span>Writing</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="analytics">
+                                    <span>Analytics</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-dropdown">
+                            <button class="filter-btn" id="locationFilter">
+                                <span>Location</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-menu" id="locationMenu">
+                                <label class="filter-option">
+                                    <input type="checkbox" value="all" checked>
+                                    <span>All Locations</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="remote">
+                                    <span>Remote</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="onsite">
+                                    <span>On-site</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="hybrid">
+                                    <span>Hybrid</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="filter-dropdown">
+                            <button class="filter-btn" id="durationFilter">
+                                <span>Duration</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-menu" id="durationMenu">
+                                <label class="filter-option">
+                                    <input type="checkbox" value="all" checked>
+                                    <span>All Durations</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="1-2weeks">
+                                    <span>1-2 weeks</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="1month">
+                                    <span>1 month</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="2-3months">
+                                    <span>2-3 months</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" value="3months+">
+                                    <span>3+ months</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="clear-filters-btn" id="clearFilters">Clear All</button>
+                </div>
+            </section>
+
+            <!-- Gigs Grid -->
+            <section class="gigs-grid" id="gigsGrid">
+                <!-- Gig cards will be inserted here by JavaScript -->
+            </section>
+
+            <!-- Load More Button -->
+            <div class="load-more-section">
+                <button class="load-more-btn" id="loadMoreBtn">
+                    <span>Load more opportunities</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <p class="gigs-count">Showing <span id="currentCount">6</span> of <span id="totalCount">42</span> gigs
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Component -->
+    <div id="footer-container"></div>
+
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+    <script src="script.js"></script>
+
+    <script src="gigboard.js"></script>
+</body>
+
+</html>
