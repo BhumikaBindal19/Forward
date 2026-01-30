@@ -1,4 +1,5 @@
 // Main JavaScript File
+// Firebase is initialized via firebase-config.js loaded from CDN
 
 // Success Stories Carousel
 let currentSlide = 0;

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborator Onboarding | Forward</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/onboarding.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="dark-theme">
+    <div class="onboarding-container">
+        <!-- Progress Header -->
+        <header class="onboarding-header">
+            <div class="logo">
+                <a href="../index.html">FORWARD</a>
+            </div>
+            <div class="progress-steps" id="progressDots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="header-actions">
+                <a href="onboarding.html" class="switch-role-btn">
+                    <i class="fas fa-rocket"></i> Join as Founder
+                </a>
+                <button class="save-exit-btn">Save & Exit</button>
+            </div>
+        </header>
+
+        <!-- Question Card -->
+        <main class="question-container">
+            <div id="questionCard" class="question-card">
+                <div class="question-phase" id="phaseName">PHASE 1: SKILLS</div>
+                <div class="question-counter" id="questionCounter">QUESTION 1 OF 4</div>
+                <h1 class="question-title" id="questionTitle">Which skills do you offer?</h1>
+                <p class="question-subtitle" id="questionSubtitle">Select all that apply to match you with the right
+                    micro-gigs.</p>
+
+                <!-- Dynamic Input Area -->
+                <div id="optionsWrapper" class="options-grid">
+                    <!-- Options will be injected here -->
+                </div>
+
+                <div id="textInputWrapper" class="text-input-wrapper" style="display: none;">
+                    <textarea id="answerInput" placeholder="Tell us more..."></textarea>
+                    <div id="contactFields" class="contact-fields" style="display: none;">
+                        <input type="tel" id="phoneInput" placeholder="Phone Number (e.g., +91...)"
+                            class="onboarding-input">
+                        <input type="text" id="locationInput" placeholder="Location / City" class="onboarding-input">
+                        <input type="url" id="portfolioInput" placeholder="Portfolio Link (e.g., Behance, LinkedIn)"
+                            class="onboarding-input">
+                    </div>
+                    <div class="input-hint">Fill in the details and press Continue</div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="nav-controls">
+                    <button id="prevBtn" class="btn-prev" disabled>
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button id="continueBtn" class="btn-continue" disabled>
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="loader-content">
+                <div class="spinner"></div>
+                <h2>Setting Up Your Profile</h2>
+                <p>Matching your skills with active opportunities...</p>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="success-modal" style="display: none;">
+            <div class="modal-content">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h2>Profile Ready!</h2>
+                <p>Your expertise is now part of the Forward ecosystem. Let's find your first gig.</p>
+                <button id="finishBtn" class="btn btn-primary">Go to Gig Board</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- App Logic -->
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/onboarding-collaborator.js"></script>
+</body>
+
+</html>

@@ -5,13 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forward - Guided Strategy</title>
-    <link rel="stylesheet" href="onboarding.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/onboarding.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
@@ -37,9 +42,14 @@
                 <div class="progress-dot" data-step="6"></div>
                 <div class="progress-dot" data-step="7"></div>
             </div>
-            <button class="save-exit-btn">
-                <i class="fas fa-sign-out-alt"></i>
-            </button>
+            <div class="header-actions">
+                <a href="onboarding-collaborator.html" class="switch-role-btn">
+                    <i class="fas fa-random"></i> Join as Collaborator
+                </a>
+                <button class="save-exit-btn">
+                    <i class="fas fa-save"></i> Save & Exit
+                </button>
+            </div>
         </div>
     </header>
 
@@ -122,9 +132,10 @@
     <!-- Footer Component -->
     <div id="footer-container"></div>
 
-    <script src="header.js"></script>
-    <script src="footer.js"></script>
-    <script src="onboarding.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/onboarding.js"></script>
 </body>
 
 </html>

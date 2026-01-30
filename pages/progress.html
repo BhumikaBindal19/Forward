@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Tracking - Forward</title>
+    <meta name="description" content="Track your business journey progress with Forward's AI-guided platform.">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/progress.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+    <!-- Header Component -->
+    <div id="header-container"></div>
+
+    <!-- Progress Section -->
+    <section class="progress-hero">
+        <div class="container">
+            <!-- Total Completion -->
+            <div class="completion-section fade-in">
+                <span class="completion-label">TOTAL COMPLETION</span>
+                <div class="completion-row">
+                    <h1 class="completion-percentage" data-target="35">0%</h1>
+                    <span class="next-milestone">Next Milestone: Market Fit</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" data-progress="35"></div>
+                </div>
+            </div>
+
+            <!-- Dashboard Actions -->
+            <div class="dashboard-actions fade-in-delay-1">
+                <button id="viewRoadmapBtn" class="btn btn-secondary">
+                    <i class="fas fa-map"></i> View AI Roadmap
+                </button>
+                <button id="createGigBtn" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Create Micro-Gig
+                </button>
+            </div>
+
+            <!-- Phase Card -->
+            <div class="phase-card fade-in-delay-1">
+                <div class="phase-header">
+                    <span class="phase-badge">CURRENT</span>
+                    <span class="phase-week" id="phase-timeline">Week 1 of 12</span>
+                </div>
+                <h2 class="phase-title" id="phase-title">Phase 1: Foundation</h2>
+                <p class="phase-description" id="phase-desc">Establishing the core pillars of your business identity and
+                    market position.</p>
+            </div>
+
+            <!-- Required Tasks -->
+            <div class="tasks-section fade-in-delay-2">
+                <div class="tasks-header">
+                    <h3 class="tasks-title">REQUIRED TASKS</h3>
+                    <span class="tasks-count"><span id="completed-count">2</span> of <span id="total-count">5</span>
+                        completed</span>
+                </div>
+
+                <div class="tasks-list" id="tasksList">
+                    <!-- Tasks will be dynamically loaded -->
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i> Loading your roadmap...
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Gigs Section -->
+            <div class="gigs-section fade-in-delay-3" id="founderGigsSection" style="display: none;">
+                <div class="section-header">
+                    <h3 class="section-title">MY MICRO-GIGS</h3>
+                    <span class="section-subtitle">Manage delegations and track applicants</span>
+                </div>
+                <div class="gigs-list" id="founderGigsList">
+                    <!-- Founder's gigs will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Help Banner -->
+            <div class="help-banner fade-in-delay-3">
+                <div class="help-icon">
+                    <i class="fas fa-magic"></i>
+                </div>
+                <div class="help-content">
+                    <h4>Stuck on the Mission Statement?</h4>
+                    <p>Our Founder's Guide has 10 templates to get you started.</p>
+                </div>
+                <button class="btn btn-primary help-btn">
+                    Open Guide
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simple Footer -->
+    <footer class="progress-footer">
+        <div class="container">
+            <p class="footer-motivation">Stay focused. You are building something great.</p>
+            <div class="footer-links">
+                <a href="#">Support</a>
+                <span class="separator">•</span>
+                <a href="#">Privacy</a>
+                <span class="separator">•</span>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Create Gig Modal (Premium Redesign) -->
+    <div id="gigModal" class="modal">
+        <div class="modal-content glass-modal">
+            <div class="modal-header">
+                <div class="modal-title-wrapper">
+                    <div class="modal-icon-badge">
+                        <i class="fas fa-sparkles"></i>
+                    </div>
+                    <div>
+                        <h2>Create Micro-Gig</h2>
+                        <p>Delegate tasks to skilled collaborators</p>
+                    </div>
+                </div>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="gigForm" class="premium-form">
+                <div class="form-group">
+                    <label><i class="fas fa-heading"></i> Gig Title</label>
+                    <input type="text" id="gigTitle" placeholder="e.g., Professional Logo for Organic Startup" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-align-left"></i> Description & Deliverables</label>
+                    <textarea id="gigDesc" placeholder="Clearly outline the scope of work and expected results..."
+                        required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-wallet"></i> Budget (₹)</label>
+                        <div class="input-with-symbol">
+                            <span>₹</span>
+                            <input type="number" id="gigBudget" value="500" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> Deadline</label>
+                        <input type="date" id="gigDeadline" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tags"></i> Required Expertise</label>
+                    <input type="text" id="gigSkills" placeholder="logo design, branding, illustration">
+                    <small class="form-hint">Comma-separated skills (e.g., design, writing)</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-paper-plane"></i> Launch Micro-Gig
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Applicants Modal -->
+    <div id="applicantsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Interested Collaborators</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="applicantsList" class="applicants-list">
+                <!-- Applicants will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/progress.js"></script>
+</body>
+
+</html>

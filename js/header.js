@@ -1,5 +1,9 @@
 // Header Component
 const createHeader = () => {
+    const isSubfolder = window.location.pathname.includes('/pages/');
+    const basePath = isSubfolder ? '../' : '';
+    const pagesPath = isSubfolder ? '' : 'pages/';
+
     const header = document.createElement('header');
     header.className = 'header';
 
@@ -7,8 +11,8 @@ const createHeader = () => {
         <nav class="navbar">
             <div class="container nav-container">
                 <div class="logo">
-                    <a href="index.html" class="logo">
-                        <img src="logo.png" alt="Forward Logo" />
+                    <a href="${basePath}index.html" class="logo">
+                        <img src="${basePath}assets/logo.png" alt="Forward Logo" />
                     </a>
                 </div>
                 
@@ -19,14 +23,14 @@ const createHeader = () => {
                 </button>
                 
                 <ul class="nav-menu">
-                    <li><a href="#features" class="nav-link">Home</a></li>
-                    <li><a href="#how-it-works" class="nav-link">About</a></li>
-                    <li><a href="#pricing" class="nav-link">Features</a></li>
+                    <li><a href="${basePath}index.html" class="nav-link">Home</a></li>
+                    <li><a href="${basePath}index.html#how-it-works" class="nav-link">About</a></li>
+                    <li><a href="${basePath}index.html#features" class="nav-link">Features</a></li>
                 </ul>
                 
-                <div class="nav-actions">
-                    <a href="#" class="nav-link">Log In</a>
-                    <button class="btn btn-primary btn-sm">Get Started</button>
+                <div class="nav-actions" id="nav-actions">
+                    <a href="${pagesPath}auth.html" class="nav-link">Log In</a>
+                    <a href="${pagesPath}auth.html" class="btn btn-primary btn-sm">Get Started</a>
                 </div>
             </div>
         </nav>
@@ -126,10 +130,37 @@ const createHeader = () => {
             align-items: center;
             gap: 20px;
         }
+
+        .user-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-link i {
+            font-size: 18px;
+        }
         
         .btn-sm {
             padding: 10px 20px;
             font-size: 14px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
         }
         
         .mobile-toggle {
@@ -151,7 +182,7 @@ const createHeader = () => {
         }
         
         .mobile-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
+            transform: rotate(45deg) translate(6px, 6px);
         }
         
         .mobile-toggle.active span:nth-child(2) {
@@ -159,7 +190,7 @@ const createHeader = () => {
         }
         
         .mobile-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
+            transform: rotate(-45deg) translate(6px, -6px);
         }
         
         @media (max-width: 768px) {
@@ -168,21 +199,24 @@ const createHeader = () => {
                 top: 70px;
                 left: 0;
                 right: 0;
+                background: white;
                 flex-direction: column;
-                background: var(--white);
+                gap: 0;
                 padding: 20px;
                 box-shadow: var(--shadow-lg);
-                transform: translateY(-100%);
+                transform: translateY(-150%);
                 opacity: 0;
-                visibility: hidden;
                 transition: all var(--transition-base);
-                gap: 16px;
             }
             
             .nav-menu.active {
                 transform: translateY(0);
                 opacity: 1;
-                visibility: visible;
+            }
+            
+            .nav-menu li {
+                padding: 15px 0;
+                border-bottom: 1px solid var(--gray-200);
             }
             
             .nav-actions {
@@ -199,11 +233,83 @@ const createHeader = () => {
     return header;
 };
 
+// Update nav actions based on auth state
+async function updateNavForAuth(user) {
+    const navActions = document.getElementById('nav-actions');
+    if (!navActions) return;
+
+    const isSubfolder = window.location.pathname.includes('/pages/');
+    const basePath = isSubfolder ? '../' : '';
+    const pagesPath = isSubfolder ? '' : 'pages/';
+
+    if (user) {
+        // Show loading state initially
+        navActions.innerHTML = `
+            <a href="#" class="nav-link loading-dash">Dashboard...</a>
+            <a href="${pagesPath}profile.html" class="nav-link user-link">
+                <i class="fas fa-user-circle"></i>
+                <span>${user.displayName || user.email?.split('@')[0] || 'Profile'}</span>
+            </a>
+            <button class="btn btn-outline btn-sm" id="logout-btn">Log Out</button>
+        `;
+
+        // Fetch user data to determine role
+        let dashboardUrl = `${pagesPath}progress.html`;
+        if (window.ForwardFirebase) {
+            const result = await window.ForwardFirebase.getUserDocument(user.uid);
+            if (result.success) {
+                const userData = result.data;
+                const role = userData.role || 'founder';
+                const isComplete = userData.onboardingCompleted === true;
+
+                if (!isComplete) {
+                    dashboardUrl = role === 'collaborator' ? `${pagesPath}onboarding-collaborator.html` : `${pagesPath}onboarding.html`;
+                } else {
+                    dashboardUrl = role === 'collaborator' ? `${pagesPath}gigboard.html` : `${pagesPath}progress.html`;
+                }
+            }
+        }
+
+        // Update with correct link
+        const dashLink = navActions.querySelector('.loading-dash');
+        if (dashLink) {
+            dashLink.href = dashboardUrl;
+            dashLink.textContent = 'Dashboard';
+            dashLink.classList.remove('loading-dash');
+        }
+
+        // Add logout handler
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                if (window.ForwardFirebase) {
+                    await window.ForwardFirebase.signOut();
+                    window.location.href = basePath + 'index.html';
+                }
+            });
+        }
+    } else {
+        // User is not logged in
+        navActions.innerHTML = `
+            <a href="${pagesPath}auth.html" class="nav-link">Log In</a>
+            <a href="${pagesPath}auth.html" class="btn btn-primary btn-sm">Get Started</a>
+        `;
+    }
+}
+
 // Insert header into container
 const headerContainer = document.getElementById('header-container');
 if (headerContainer) {
     headerContainer.appendChild(createHeader());
 }
+
+// Wait for Firebase to be ready and listen for auth changes
+setTimeout(() => {
+    if (window.ForwardFirebase && window.ForwardFirebase.initializeFirebase) {
+        window.ForwardFirebase.initializeFirebase();
+        window.ForwardFirebase.onAuthStateChanged(updateNavForAuth);
+    }
+}, 100);
 
 // Handle scroll effect
 let lastScroll = 0;

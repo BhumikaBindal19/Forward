@@ -340,64 +340,308 @@
     font-size: 8px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .progress-hero {
-        padding: 100px 20px 40px;
-    }
-
-    .completion-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .next-milestone {
-        order: -1;
-    }
-
-    .phase-card {
-        padding: 20px 24px;
-    }
-
-    .task-item {
-        padding: 16px 20px;
-        flex-wrap: wrap;
-    }
-
-    .task-status-badge {
-        margin-left: 40px;
-        margin-top: 8px;
-    }
-
-    .help-banner {
-        flex-direction: column;
-        text-align: center;
-        padding: 24px;
-    }
-
-    .help-content {
-        text-align: center;
-    }
-
-    .help-btn {
-        width: 100%;
-        justify-content: center;
-    }
+/* Dashboard Actions */
+.dashboard-actions {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
 }
 
-@media (max-width: 480px) {
-    .completion-percentage {
-        font-size: 42px;
+.dashboard-actions .btn {
+    flex: 1;
+    justify-content: center;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-bold);
+    box-shadow: var(--shadow-md);
+}
+
+/* Modals */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--white);
+    width: 90%;
+    max-width: 500px;
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    position: relative;
+    animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.modal-header h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+/* My Gigs Section */
+.gigs-section {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid var(--gray-200);
+}
+
+.section-header {
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 1.5px;
+}
+
+.gig-item {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.gig-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.gig-info h4 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+}
+
+.gig-meta {
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 16px;
+}
+
+.applicant-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Premium Modal Styling */
+.glass-modal {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.modal-icon-badge {
+    width: 48px;
+    height: 48px;
+    background: var(--gradient-primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.modal-header p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.premium-form {
+    margin-top: 24px;
+}
+
+.premium-form label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.premium-form label i {
+    color: var(--primary-color);
+    font-size: 14px;
+}
+
+.premium-form input,
+.premium-form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    font-family: var(--font-family);
+    transition: all 0.2s ease;
+}
+
+.premium-form input:focus,
+.premium-form textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(57, 33, 162, 0.1);
+    outline: none;
+}
+
+.input-with-symbol {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-symbol span {
+    position: absolute;
+    left: 16px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.input-with-symbol input {
+    padding-left: 32px;
+}
+
+.form-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.modal-footer {
+    margin-top: 32px;
+}
+
+.btn-full {
+    width: 100%;
+    justify-content: center;
+    padding: 16px;
+    font-size: 16px;
+}
+
+/* Applicant List Improvements */
+.applicant-item {
+    background: var(--white);
+    padding: 24px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+}
+
+.applicant-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.applicant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.applicant-info h5 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.applicant-location {
+    font-size: 13px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.match-badge {
+    padding: 4px 10px;
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--accent-color);
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.applicant-details p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 4px 0;
+}
+
+.applicant-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--gray-100);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-actions {
+        flex-direction: column;
     }
 
-    .phase-title {
-        font-size: 22px;
-    }
-
-    .tasks-header {
+    .gig-item {
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
+        gap: 16px;
     }
 }

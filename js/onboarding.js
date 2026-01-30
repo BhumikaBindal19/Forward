@@ -97,20 +97,44 @@ const progressDots = document.querySelectorAll('.progress-dot');
 const successModal = document.getElementById('successModal');
 
 // Initialize
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    loadQuestion(0);
-    setupEventListeners();
-    autoResizeTextarea();
+    if (window.ForwardFirebase && window.ForwardFirebase.initializeFirebase) {
+        window.ForwardFirebase.initializeFirebase();
+        window.ForwardFirebase.onAuthStateChanged(async (user) => {
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Check if user should be here
+            const redirectPath = await window.ForwardFirebase.checkOnboardingStatus(user);
+            if (redirectPath && !redirectPath.includes('onboarding.html')) {
+                window.location.href = redirectPath;
+                return;
+            }
+
+            // If we are here, load the UI
+            loadQuestion(0);
+            setupEventListeners();
+            autoResizeTextarea();
+        });
+    } else {
+        // Fallback or demo mode
+        loadQuestion(0);
+        setupEventListeners();
+        autoResizeTextarea();
+    }
 });
 
 // Setup Event Listeners
 function setupEventListeners() {
     // Continue button
     continueBtn.addEventListener('click', handleContinue);
-    
+
     // Previous button
     prevBtn.addEventListener('click', goToPrevious);
-    
+
     // Enter key to submit
     answerInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -120,22 +144,22 @@ function setupEventListeners() {
             }
         }
     });
-    
+
     // Enable continue button when user types
     answerInput.addEventListener('input', () => {
         const hasText = answerInput.value.trim().length > 0;
         continueBtn.disabled = !hasText;
-        
+
         // Auto-save
         if (hasText) {
             saveAnswer();
         }
     });
-    
+
     // Exit button
     document.querySelector('.save-exit-btn').addEventListener('click', () => {
         if (confirm('Are you sure you want to exit? Your progress will be saved.')) {
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         }
     });
 }
@@ -143,22 +167,22 @@ function setupEventListeners() {
 // Load Question
 function loadQuestion(index) {
     const question = questions[index];
-    
+
     // Add fade out animation to current content
     questionCard.classList.add('fade-out');
-    
+
     setTimeout(() => {
         // Update content
         phaseName.textContent = question.phase;
         questionTitle.textContent = question.title;
         questionSubtitle.textContent = question.subtitle;
-        
+
         // Update question counter
         questionCounter.textContent = `QUESTION ${index + 1} OF ${questions.length}`;
-        
+
         // Update progress dots
         updateProgressDots(index);
-        
+
         // Show appropriate input type
         if (question.type === 'text') {
             textInputWrapper.style.display = 'block';
@@ -166,7 +190,7 @@ function loadQuestion(index) {
             answerInput.placeholder = question.placeholder;
             answerInput.value = answers[question.id] || '';
             answerInput.focus();
-            
+
             // Enable/disable continue button
             continueBtn.disabled = !answerInput.value.trim();
         } else if (question.type === 'options') {
@@ -174,14 +198,14 @@ function loadQuestion(index) {
             optionsWrapper.style.display = 'grid';
             renderOptions(question.options, question.id);
         }
-        
+
         // Update navigation buttons
         prevBtn.disabled = index === 0;
-        
+
         // Remove fade out and add slide in
         questionCard.classList.remove('fade-out');
         questionCard.classList.add('slide-in-right');
-        
+
         setTimeout(() => {
             questionCard.classList.remove('slide-in-right');
         }, 500);
@@ -191,7 +215,7 @@ function loadQuestion(index) {
 // Render Options
 function renderOptions(options, questionId) {
     optionsWrapper.innerHTML = '';
-    
+
     options.forEach((option, idx) => {
         const optionCard = document.createElement('div');
         optionCard.className = 'option-card';
@@ -199,34 +223,34 @@ function renderOptions(options, questionId) {
             <i class="fas ${option.icon}"></i>
             <span>${option.text}</span>
         `;
-        
+
         // Check if this option was previously selected
         if (answers[questionId] === option.value) {
             optionCard.classList.add('selected');
         }
-        
+
         optionCard.addEventListener('click', () => {
             // Remove selected class from all options
             document.querySelectorAll('.option-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            
+
             // Add selected class to clicked option
             optionCard.classList.add('selected');
-            
+
             // Save answer
             answers[questionId] = option.value;
             saveToLocalStorage();
-            
+
             // Auto-advance after short delay
             setTimeout(() => {
                 handleContinue();
             }, 400);
         });
-        
+
         // Stagger animation
         optionCard.style.animation = `fadeInUp 0.4s ease-out ${idx * 0.1}s backwards`;
-        
+
         optionsWrapper.appendChild(optionCard);
     });
 }
@@ -234,16 +258,16 @@ function renderOptions(options, questionId) {
 // Handle Continue
 function handleContinue() {
     const question = questions[currentQuestionIndex];
-    
+
     // Save text answer
     if (question.type === 'text') {
         const answer = answerInput.value.trim();
         if (!answer) return;
-        
+
         answers[question.id] = answer;
         saveToLocalStorage();
     }
-    
+
     // Move to next question or complete
     if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
@@ -265,7 +289,7 @@ function goToPrevious() {
 function updateProgressDots(index) {
     progressDots.forEach((dot, idx) => {
         dot.classList.remove('active', 'completed');
-        
+
         if (idx < index) {
             dot.classList.add('completed');
         } else if (idx === index) {
@@ -289,32 +313,137 @@ function loadFromLocalStorage() {
 }
 
 // Complete Onboarding
-function completeOnboarding() {
+async function completeOnboarding() {
     // Mark all dots as completed
     progressDots.forEach(dot => {
         dot.classList.add('completed');
         dot.classList.remove('active');
     });
-    
+
     // Show success modal
     successModal.style.display = 'flex';
-    
-    // Simulate roadmap generation
-    setTimeout(() => {
+
+    // Check if Firebase is initialized
+    if (window.ForwardFirebase && window.ForwardFirebase.initializeFirebase) {
+        window.ForwardFirebase.initializeFirebase();
+
+        // Wait for auth state
+        window.ForwardFirebase.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    // Format answers for Firestore
+                    const questionnaireAnswers = {};
+                    questions.forEach(q => {
+                        if (answers[q.id]) {
+                            questionnaireAnswers[q.phase.toLowerCase().replace(/\s+/g, '_')] = {
+                                question: q.title,
+                                answer: answers[q.id]
+                            };
+                        }
+                    });
+
+                    console.log('Saving questionnaire answers:', questionnaireAnswers);
+
+                    // Update user role and status explicitly
+                    await window.ForwardFirebase.updateUserDocument(user.uid, {
+                        role: 'founder',
+                        onboardingCompleted: true
+                    });
+
+                    // Create project in Firestore
+                    const result = await window.ForwardFirebase.createProject(user.uid, questionnaireAnswers);
+
+                    if (result.success) {
+                        console.log('Project created:', result.projectId);
+
+                        // Clear local storage
+                        localStorage.removeItem('onboardingAnswers');
+
+                        // Store project ID for progress page
+                        localStorage.setItem('currentProjectId', result.projectId);
+
+                        // Redirect to progress page after a short delay
+                        setTimeout(() => {
+                            window.location.href = 'progress.html';
+                        }, 2000);
+                    } else {
+                        console.error('Failed to create project:', result.error);
+                        showNotification('Failed to save your answers. Please try again.', 'error');
+                        successModal.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Error saving to Firestore:', error);
+                    showNotification('An error occurred. Please try again.', 'error');
+                    successModal.style.display = 'none';
+                }
+            } else {
+                // Not logged in, redirect to auth
+                window.location.href = 'auth.html';
+            }
+        });
+    } else {
+        // Fallback for when Firebase is not available
         console.log('Final Answers:', answers);
-        
-        // Redirect to roadmap page
-        // window.location.href = 'roadmap.html';
-        
-        // For demo, just show alert
-        alert('Roadmap generated! (In production, this would redirect to your personalized roadmap)');
-        successModal.style.display = 'none';
-    }, 3000);
+
+        // For demo, just show success and redirect
+        setTimeout(() => {
+            window.location.href = 'progress.html';
+        }, 2000);
+    }
+}
+
+// Notification helper
+function showNotification(message, type = 'info') {
+    const existing = document.querySelector('.notification');
+    if (existing) existing.remove();
+
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i>
+        <span>${message}</span>
+    `;
+
+    if (!document.getElementById('notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            }
+            .notification-success { background: #10B981; color: white; }
+            .notification-error { background: #EF4444; color: white; }
+            .notification-info { background: #3921A2; color: white; }
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    document.body.appendChild(notification);
+    setTimeout(() => {
+        notification.style.animation = 'slideIn 0.3s ease reverse';
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
 }
 
 // Auto-resize Textarea
 function autoResizeTextarea() {
-    answerInput.addEventListener('input', function() {
+    answerInput.addEventListener('input', function () {
         this.style.height = 'auto';
         this.style.height = Math.min(this.scrollHeight, 300) + 'px';
     });
@@ -331,7 +460,7 @@ function saveAnswer() {
 document.addEventListener('keydown', (e) => {
     // Don't trigger if user is typing
     if (document.activeElement === answerInput) return;
-    
+
     // Arrow keys for navigation
     if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
         goToPrevious();

@@ -1,8 +1,10 @@
-// Auth Page JavaScript - Toggle between Login and Signup
+// Auth Page JavaScript - Firebase Integration
+// Toggle between Login and Signup with real Firebase authentication
 
 // State Management
 let isSignupMode = false;
 let selectedRole = '';
+let firebaseInitialized = false;
 
 // DOM Elements
 const authForm = document.getElementById('authForm');
@@ -15,6 +17,65 @@ const headerBadge = document.getElementById('headerBadge');
 const roleSelection = document.getElementById('roleSelection');
 const termsGroup = document.getElementById('termsGroup');
 const formContainer = document.querySelector('.form-container');
+
+// Initialize Firebase when ready
+document.addEventListener('DOMContentLoaded', () => {
+    let attempts = 0;
+    const maxAttempts = 20; // Try for 2 seconds
+
+    const waitForFirebase = setInterval(() => {
+        attempts++;
+        if (window.ForwardFirebase && window.ForwardFirebase.initializeFirebase()) {
+            clearInterval(waitForFirebase);
+            firebaseInitialized = true;
+            console.log('Firebase ready for auth');
+
+            // Check if user is already logged in
+            window.ForwardFirebase.onAuthStateChanged(user => {
+                if (user) {
+                    console.log('User already logged in:', user.email);
+                    // Redirect to appropriate page based on role
+                    redirectAfterAuth(user);
+                }
+            });
+        } else if (attempts >= maxAttempts) {
+            clearInterval(waitForFirebase);
+            console.error('Firebase failed to initialize after multiple attempts. Check network connection.');
+            // Optionally show a UI error message to the user
+            const formContainer = document.querySelector('.form-container');
+            if (formContainer) {
+                const errorBanner = document.createElement('div');
+                errorBanner.style.background = '#ffebee';
+                errorBanner.style.color = '#c62828';
+                errorBanner.style.padding = '10px';
+                errorBanner.style.borderRadius = '4px';
+                errorBanner.style.marginBottom = '15px';
+                errorBanner.style.textAlign = 'center';
+                errorBanner.textContent = 'Unable to connect to service. Please refresh the page.';
+                formContainer.prepend(errorBanner);
+            }
+        }
+    }, 100);
+});
+
+// Redirect after successful authentication
+async function redirectAfterAuth(user) {
+    try {
+        console.log('Authenticating user:', user.uid);
+        const redirectPath = await window.ForwardFirebase.checkOnboardingStatus(user);
+        if (redirectPath) {
+            console.log('Redirecting to:', redirectPath);
+            window.location.href = redirectPath;
+        } else {
+            console.warn('No redirect path returned from checkOnboardingStatus on auth page.');
+            // Fallback if something is weird, though checkOnboardingStatus covers auth.html
+            window.location.href = 'index.html';
+        }
+    } catch (error) {
+        console.error('Redirect error:', error);
+        window.location.href = 'auth.html';
+    }
+}
 
 // Toggle between Login and Signup
 toggleLink.addEventListener('click', function (e) {
@@ -250,13 +311,13 @@ const validateForm = () => {
     // Validate role selection (only for signup)
     if (isSignupMode) {
         if (!selectedRole) {
-            alert('Please select your role: Start a Business or Find Gigs');
+            showNotification('Please select your role: Start a Business or Find Gigs', 'error');
             isValid = false;
         }
 
         // Validate terms
         if (!terms.checked) {
-            alert('Please accept the Terms of Service and Privacy Policy');
+            showNotification('Please accept the Terms of Service and Privacy Policy', 'error');
             isValid = false;
         }
     }
@@ -293,12 +354,79 @@ const showSuccess = (input) => {
     }
 };
 
-// Form Submission
+// Notification system
+function showNotification(message, type = 'info') {
+    // Remove existing notification
+    const existing = document.querySelector('.notification');
+    if (existing) existing.remove();
+
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i>
+        <span>${message}</span>
+    `;
+
+    // Add notification styles if not exists
+    if (!document.getElementById('notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            }
+            .notification-success {
+                background: #10B981;
+                color: white;
+            }
+            .notification-error {
+                background: #EF4444;
+                color: white;
+            }
+            .notification-info {
+                background: #3921A2;
+                color: white;
+            }
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    document.body.appendChild(notification);
+
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideIn 0.3s ease reverse';
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
+}
+
+// Form Submission with Firebase
 if (authForm) {
     authForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         if (!validateForm()) {
+            return;
+        }
+
+        if (!firebaseInitialized) {
+            showNotification('Firebase is not ready. Please wait and try again.', 'error');
             return;
         }
 
@@ -310,36 +438,123 @@ if (authForm) {
         // Show loading state
         submitBtn.classList.add('loading');
         submitBtn.disabled = true;
+        submitText.textContent = isSignupMode ? 'Creating Account...' : 'Signing In...';
 
-        // Simulate API call
-        setTimeout(() => {
+        try {
             if (isSignupMode) {
-                console.log('Signup submitted:', { username, email, password, role: selectedRole });
-                alert(`Account created successfully! Welcome to Forward as a ${selectedRole === 'entrepreneur' ? 'Business Owner' : 'Collaborator'}.`);
-            } else {
-                console.log('Login submitted:', { username, email, password });
-                alert('Login successful! Welcome back to Forward.');
-            }
+                // Map role to backend format
+                const role = selectedRole === 'entrepreneur' ? 'founder' : 'collaborator';
 
-            // Reset form
-            authForm.reset();
+                const result = await window.ForwardFirebase.signUpWithEmail(email, password, username, role);
+
+                if (result.success) {
+                    showNotification(`Account created successfully! Welcome to Forward.`, 'success');
+
+                    // Short delay then redirect
+                    setTimeout(() => {
+                        if (role === 'collaborator') {
+                            window.location.href = 'onboarding-collaborator.html';
+                        } else {
+                            window.location.href = 'onboarding.html';
+                        }
+                    }, 1500);
+                } else {
+                    handleAuthError(result.code, result.error);
+                }
+            } else {
+                // Login
+                const result = await window.ForwardFirebase.signInWithEmail(email, password);
+
+                if (result.success) {
+                    showNotification('Login successful! Redirecting...', 'success');
+
+                    // Redirect based on user role
+                    setTimeout(() => {
+                        redirectAfterAuth(result.user);
+                    }, 1000);
+                } else {
+                    handleAuthError(result.code, result.error);
+                }
+            }
+        } catch (error) {
+            console.error('Auth error:', error);
+            showNotification('An unexpected error occurred. Please try again.', 'error');
+        } finally {
             submitBtn.classList.remove('loading');
             submitBtn.disabled = false;
-
-            // Hide password strength
-            document.getElementById('passwordStrength').classList.remove('visible');
-
-            // Clear role selection
-            document.querySelectorAll('.role-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            selectedRole = '';
-
-            // Redirect to dashboard
-            // window.location.href = 'dashboard.html';
-        }, 2000);
+            submitText.textContent = isSignupMode ? 'Create Account' : 'Login';
+        }
     });
 }
+
+// Handle Firebase auth errors
+function handleAuthError(code, message) {
+    switch (code) {
+        case 'auth/email-already-in-use':
+            showNotification('This email is already registered. Please login instead.', 'error');
+            break;
+        case 'auth/invalid-email':
+            showNotification('Please enter a valid email address.', 'error');
+            break;
+        case 'auth/weak-password':
+            showNotification('Password is too weak. Please use at least 8 characters.', 'error');
+            break;
+        case 'auth/user-not-found':
+            showNotification('No account found with this email. Please sign up.', 'error');
+            break;
+        case 'auth/wrong-password':
+            showNotification('Incorrect password. Please try again.', 'error');
+            break;
+        case 'auth/too-many-requests':
+            showNotification('Too many failed attempts. Please try again later.', 'error');
+            break;
+        case 'auth/invalid-credential':
+            showNotification('Invalid email or password. Please check and try again.', 'error');
+            break;
+        default:
+            showNotification(message || 'Authentication failed. Please try again.', 'error');
+    }
+}
+
+// Google Sign In
+document.querySelectorAll('.btn-social').forEach(btn => {
+    btn.addEventListener('click', async function () {
+        const provider = this.textContent.trim();
+
+        if (provider === 'Google') {
+            if (!firebaseInitialized) {
+                showNotification('Firebase is not ready. Please wait and try again.', 'error');
+                return;
+            }
+
+            this.disabled = true;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+
+            try {
+                const result = await window.ForwardFirebase.signInWithGoogle();
+
+                if (result.success) {
+                    showNotification('Google sign-in successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        redirectAfterAuth(result.user);
+                    }, 1000);
+                } else {
+                    if (result.code !== 'auth/popup-closed-by-user') {
+                        showNotification(result.error || 'Google sign-in failed', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                showNotification('Google sign-in failed. Please try again.', 'error');
+            } finally {
+                this.disabled = false;
+                this.innerHTML = '<i class="fab fa-google"></i> Google';
+            }
+        } else {
+            showNotification('GitHub sign-in coming soon!', 'info');
+        }
+    });
+});
 
 // Real-time validation on blur
 document.getElementById('username')?.addEventListener('blur', function () {
@@ -408,14 +623,11 @@ window.addEventListener('load', () => {
             firstInput.focus();
         }, 500);
     }
-});
 
-// Social login handlers
-document.querySelectorAll('.btn-social').forEach(btn => {
-    btn.addEventListener('click', function () {
-        const provider = this.textContent.trim();
-        console.log(`Social ${isSignupMode ? 'signup' : 'login'} with ${provider}`);
-    });
+    // Check auth status if available
+    if (window.ForwardFirebase && window.ForwardFirebase.checkUnauthAndRedirect) {
+        window.ForwardFirebase.checkUnauthAndRedirect();
+    }
 });
 
 // Console welcome message

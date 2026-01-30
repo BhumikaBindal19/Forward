@@ -5,13 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forward - Gig Board</title>
-    <link rel="stylesheet" href="gigboard.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/gigboard.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
@@ -23,10 +28,31 @@
     <!-- Main Content -->
     <main class="gigboard-main">
         <div class="gigboard-container">
-            <!-- Page Header -->
-            <section class="page-header">
-                <h1 class="page-title">Ethical Gig Board</h1>
-                <p class="page-subtitle">Curated short-term opportunities for impactful entrepreneurs.</p>
+            <!-- Dashboard Hero -->
+            <section class="dashboard-hero">
+                <div class="user-stats fade-in">
+                    <div class="stat-card">
+                        <span class="stat-value" id="appliedCount">0</span>
+                        <span class="stat-label">Gigs Applied</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="activeCount">0</span>
+                        <span class="stat-label">Active Work</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="earningsValue">₹0</span>
+                        <span class="stat-label">Est. Earnings</span>
+                    </div>
+                </div>
+
+                <div class="profile-status fade-in-delay-1">
+                    <div class="profile-badge">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Profile 100% Complete</span>
+                    </div>
+                    <h1 class="page-title">Matched Opportunities</h1>
+                    <p class="page-subtitle">Personalized micro-gigs based on your skills and location.</p>
+                </div>
             </section>
 
             <!-- Filters Section -->
@@ -148,11 +174,12 @@
     <!-- Footer Component -->
     <div id="footer-container"></div>
 
-    <script src="header.js"></script>
-    <script src="footer.js"></script>
-    <script src="script.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/script.js"></script>
 
-    <script src="gigboard.js"></script>
+    <script src="../js/gigboard.js"></script>
 </body>
 
 </html>

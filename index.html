@@ -5,12 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forward - Execute Your Vision</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
@@ -34,8 +39,8 @@
                         businesses—empowering women entrepreneurs with real incentives and ethical collaboration.
                     </p>
                     <div class="hero-cta fade-in-delay-2">
-                        <button class="btn btn-primary">Launch My Business</button>
-                        <button class="btn btn-secondary">Apply as a Collaborator</button>
+                        <a href="pages/auth.html" class="btn btn-primary">Launch My Business</a>
+                        <a href="pages/auth.html" class="btn btn-secondary">Apply as a Collaborator</a>
                     </div>
                     <div class="hero-trust fade-in-delay-3">
                         <i class="fas fa-shield-check"></i>
@@ -48,8 +53,7 @@
                         <div class="carousel-container">
                             <div class="success-card active">
                                 <div class="success-image">
-                                    <img src="assets/PrernaGupta.jpg"
-                                        alt="Prerna Gupta">
+                                    <img src="assets/PrernaGupta.jpg" alt="Prerna Gupta">
                                 </div>
                                 <div class="success-content">
                                     <h4>Prerna Gupta</h4>
@@ -65,8 +69,7 @@
 
                             <div class="success-card">
                                 <div class="success-image">
-                                    <img src="assets/BhumiBindal.jpg"
-                                        alt="Bhumi Bindal">
+                                    <img src="assets/BhumiBindal.jpg" alt="Bhumi Bindal">
                                 </div>
                                 <div class="success-content">
                                     <h4>Bhumi Bindal</h4>
@@ -82,8 +85,7 @@
 
                             <div class="success-card">
                                 <div class="success-image">
-                                    <img src="assets/TanuDhawan.jpg"
-                                        alt="Tanu Dhawan">
+                                    <img src="assets/TanuDhawan.jpg" alt="Tanu Dhawan">
                                 </div>
                                 <div class="success-content">
                                     <h4>Tanu Dhawan</h4>
@@ -99,8 +101,7 @@
 
                             <div class="success-card">
                                 <div class="success-image">
-                                    <img src="assets/AryanDas.jpg"
-                                        alt="Aryan Das">
+                                    <img src="assets/AryanDas.jpg" alt="Aryan Das">
                                 </div>
                                 <div class="success-content">
                                     <h4>Aryan Das</h4>
@@ -116,8 +117,7 @@
 
                             <div class="success-card">
                                 <div class="success-image">
-                                    <img src="assets/RosaPrince.jpg"
-                                        alt="Rosa Prince">
+                                    <img src="assets/RosaPrince.jpg" alt="Rosa Prince">
                                 </div>
                                 <div class="success-content">
                                     <h4>Rosa Prince</h4>
@@ -166,7 +166,8 @@
                         <i class="fas fa-hand-holding-usd"></i>
                     </div>
                     <h3>Paid Micro-Collaborations</h3>
-                    <p>Post small tasks, find verified helpers, and get work done quickly — with fair pay and clear scope.</p>
+                    <p>Post small tasks, find verified helpers, and get work done quickly — with fair pay and clear
+                        scope.</p>
                 </div>
             </div>
         </div>
@@ -270,7 +271,7 @@
                 <h2>Ready to work or build? We support both.</h2>
                 <p>Start your own business with AI guidance — or earn through short, paid collaborations.</p>
                 <div class="cta-buttons">
-                    <button class="btn btn-light">Join Now</button>
+                    <a href="pages/auth.html" class="btn btn-light">Join Now</a>
                     <span class="cta-note">From skill to income — start here.</span>
                 </div>
             </div>
@@ -280,9 +281,10 @@
     <!-- Footer Component -->
     <div id="footer-container"></div>
 
-    <script src="header.js"></script>
-    <script src="footer.js"></script>
-    <script src="script.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/footer.js"></script>
+    <script src="js/script.js"></script>
 </body>
 
 </html>
