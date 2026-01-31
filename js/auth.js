@@ -444,7 +444,7 @@ if (authForm) {
             if (isSignupMode) {
                 // Map role to backend format
                 const role = selectedRole === 'entrepreneur' ? 'founder' : 'collaborator';
-
+                localStorage.setItem('pending_role', role);
                 const result = await window.ForwardFirebase.signUpWithEmail(email, password, username, role);
 
                 if (result.success) {

@@ -408,13 +408,25 @@ async function checkOnboardingStatus(user) {
         console.log('[AuthGuard] Checking status for:', user.email);
         console.log('[AuthGuard] Firestore Result:', result);
 
+        // if (!result.success) {
+        //     console.warn('[AuthGuard] User document not found or error. Defaulting to onboarding.');
+        //     return 'onboarding.html';
+        // }
         if (!result.success) {
-            console.warn('[AuthGuard] User document not found or error. Defaulting to onboarding.');
+            console.warn('[AuthGuard] Document not ready. Checking local backup...');
+
+            // Check that local save we made in auth.js
+            const backupRole = localStorage.getItem('pending_role');
+
+            if (backupRole === 'collaborator') {
+                return 'onboarding-collaborator.html';
+            }
             return 'onboarding.html';
         }
 
         const userData = result.data;
-        const role = userData.role || 'founder';
+        // const role = userData.role || 'founder';
+        const role = userData.role || localStorage.getItem('pending_role') || 'founder';
         const isComplete = userData.onboardingCompleted === true;
 
         // Get current filename, handle root/index

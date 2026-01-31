@@ -134,13 +134,34 @@ function loadQuestion(index) {
         document.getElementById('portfolioInput').value = answers.portfolio || '';
 
         checkContactValidity();
+        // } else {
+        //     optionsWrapper.style.display = 'none';
+        //     textInputWrapper.style.display = 'block';
+        //     answerInput.style.display = 'block';
+        //     document.getElementById('contactFields').style.display = 'none';
+        //     answerInput.value = answers[question.id] || '';
+        //     continueBtn.disabled = !answerInput.value.trim();
+        // }
+        // AFTER (The fixed section)
     } else {
+        // Hide options and show the text area
         optionsWrapper.style.display = 'none';
         textInputWrapper.style.display = 'block';
         answerInput.style.display = 'block';
         document.getElementById('contactFields').style.display = 'none';
-        answerInput.value = answers[question.id] || '';
-        continueBtn.disabled = !answerInput.value.trim();
+
+        // Set the value from saved answers (if any)
+        const savedValue = answers[question.id] || '';
+        answerInput.value = savedValue;
+
+        // CRITICAL FIX: Explicitly enable/disable the button based on text presence
+        if (savedValue.trim().length > 0) {
+            continueBtn.disabled = false;
+            continueBtn.style.opacity = '1'; // Ensure it looks clickable
+        } else {
+            continueBtn.disabled = true;
+            continueBtn.style.opacity = '0.5'; // Visual cue that it's locked
+        }
     }
 
     prevBtn.disabled = index === 0;
